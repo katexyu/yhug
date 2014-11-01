@@ -4,11 +4,14 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost:27017/yhug');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -54,6 +57,16 @@ app.use(function(err, req, res, next) {
         message: err.message,
         error: {}
     });
+});
+
+var debug = require('debug')('yhug');
+
+
+app.set('port', process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8080);
+app.set('ipaddress', process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
+
+var server = app.listen(app.get('port'), app.get('ipaddress'), function() {
+  debug('Express server listening on port ' + server.address().port);
 });
 
 
