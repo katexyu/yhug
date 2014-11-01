@@ -8,11 +8,11 @@ router.get('/facebook', passport.authenticate('facebook'));
 router.get('/facebook/callback', function(req, res, next){
     passport.authenticate('facebook', function(err, user, info){
         if (err) return next(err);
-        if (!user) return res.status(400).send(info);
+        if (!user) return res.status(400).json({'error':'Something went wrong here'}).end();
         else {
             req.login(user, function(err){
                 if (err) return next(err);
-                return res.status(200).send({'message': 'Successfully logged in', 'user': user});
+                return res.redirect('/hug');
             });
         }
     })(req, res, next);
