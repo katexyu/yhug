@@ -6,8 +6,9 @@ block header
 block content
     h1.ui.header= title
         .sub.header Welcome to #{title}
-    .ui.facebook.button
-        i.facebook.icon
-        | Facebook
+    a(href="/auth/facebook")
+        .ui.facebook.button
+            i.facebook.icon
+            | Facebook
     .ui.button Hug Me
     p#location

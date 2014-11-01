@@ -1,30 +1,31 @@
-var config = require('../config'); //not checked into the repo
+var config = require('../auth/config'); //not checked into the repo
 var FacebookStrategy = require('passport-facebook').Strategy;
-var User = require('../model/user-model');
+var User = require('../model/user');
+var app = require('../app');
 
-var fbConfigs = app.get('env') === 'development'? config.test: config.production;
+//var fbConfigs = app.env === 'development'? config.test: config.production;
+var fbConfigs = config.test;
 
 module.exports = function(passport){
   passport.use(new FacebookStrategy({
       clientID: fbConfigs.clientID,
       clientSecret: fbConfigs.clientSecret,
       callbackURL: fbConfigs.callbackURL,
-      profileFields: ['id', 'name','picture.type(large)', 'username', 'displayName']
+      profileFields: ['id', 'name', 'displayName', 'photos']
     },
     function(accessToken, refreshToken, profile, done) {
       process.nextTick(function() {
           // check to see if there's already a user with that email
           User.findOne({ 'facebookId' :  profile.id }, function(err, user) {
               // if there are any errors, return the error
-              if (err)
-                  return done(err);
+              if (err) return done(err);
               if (user) {
                   //log them in
                   return done(null, user);
               } else {
                   // if there is no user with a matching FB account, create the user
-                  var newUser = new User({facebookId: profile.id, token: accessToken, givenName: profile.name.givenName, familyName: profile.name.familyName, picture: profile.picture.type(large)});
-                  newUser.save();
+                  var newUser = new User({facebookId: profile.id, accessToken: accessToken, givenName: profile.name.givenName, familyName: profile.name.familyName, photo: profile.photos[0].value});
+                  //newUser.save();
                   return done(null, newUser);
           }    
       });

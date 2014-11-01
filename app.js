@@ -4,10 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 var mongoose = require('mongoose');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var auth = require('./routes/auth');
+var passport = require('passport');
 
 var app = express();
 
@@ -25,8 +28,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//set up passport
+require('./auth/passport-facebook')(passport);
+app.use(session({ secret: 'yhug-at-yhack?' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/', routes);
 app.use('/users', users);
+app.use('/auth', auth);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -49,6 +60,8 @@ if (app.get('env') === 'development') {
     });
 }
 
+app.env = app.get('env');
+
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
@@ -60,7 +73,6 @@ app.use(function(err, req, res, next) {
 });
 
 var debug = require('debug')('yhug');
-
 
 app.set('port', process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8080);
 app.set('ipaddress', process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');

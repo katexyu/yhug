@@ -1,0 +1,21 @@
+var express = require('express');
+var passport = require('passport');
+var router = express.Router();
+
+router.get('/facebook', passport.authenticate('facebook'));
+
+// Facebook will redirect the user to this URL after approval. 
+router.get('/facebook/callback', function(req, res, next){
+    passport.authenticate('facebook', function(err, user, info){
+        if (err) return next(err);
+        if (!user) return res.status(400).send(info);
+        else {
+            req.login(user, function(err){
+                if (err) return next(err);
+                return res.status(200).send({'message': 'Successfully logged in', 'user': user});
+            });
+        }
+    })(req, res, next);
+});
+
+module.exports = router;
