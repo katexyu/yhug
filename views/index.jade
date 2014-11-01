@@ -1,9 +1,10 @@
 extends layout
 
 block content
-    h1.ui.header= title
-        .sub.header Welcome to #{title}
-    a(href="/auth/facebook")
-        .ui.facebook.button
-            i.facebook.icon
-            | Facebook
+    div.container.main
+        img(src="/images/yhug.png").logo
+        h1 Log In With
+        a(href="/auth/facebook")
+            button.btn.btn-larger.facebook-btn
+                i.fa.fa-facebook
+                |  Facebook

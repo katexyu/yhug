@@ -26,4 +26,14 @@ $(document).ready(function() {
             $("#location").html("Geolocation is not supported by this browser.");
         }
     }
+
+    $("#logout").on("click", function(e){ 
+        $.ajax({
+          url: '/logout',
+          type: 'POST',
+          success: function(){
+              window.location.href = '/';
+            }
+        });
+    });
 });

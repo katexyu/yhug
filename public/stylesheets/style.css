@@ -1,8 +1,92 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 14px "Lato", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+.btn-larger{
+    width:200px;
+    height:75px;
+    font-size:25px;
+    opacity:.8;
+}
+
+.btn-larger:hover, .btn-larger:focus, .btn-larger:active{
+    opacity:1;
+    color:#FFFFFF;
+}
+
+/*Landing page*/
+.main{
+    margin:auto;
+    width:100%;
+    height:50%;
+    margin-top:100px;
+    text-align:center;
+}
+
+.main .logo{
+    width:500px;
+    height:auto;
+}
+
+.header{
+    font-family: "Montserrat";
+}
+
+.facebook-btn{
+    background-color:#4c66a4;
+    color: #FFFFFF;
+}
+
+/*Navbar*/
+.navbar li a{
+  font-size:16px;
+  font-family: Montserrat;
+  color: #000000; 
+}
+
+.wrapper {
+    width: 5%;
+    display: inline-block;
+    position: relative;
+    margin-top:15px;
+}
+
+.navbar li a:hover{
+  background-color:#FAFAFA;
+  color:#E08283;
+}
+.navbar-container{
+  border-bottom: 1px solid #D8E6E6;
+  background-color:#FAFAFA;
+  height:55px;
+  margin-bottom:50px;
+}
+#logout{
+    float:right;
+    margin-right: 30px;
+}
+
+#logout-link{
+    color:#000000;
+    margin-top:15px;
+    font-size:20px;
+}
+
+#logout-link:hover{
+    text-decoration:none;
+    color:#FF7878;
+}
+
+#navbar-logo{
+  width:100px;
+  height:auto;
+}
+
+#hug{
+    background-color:#FF7878;
+    color:#FFFFFF;
 }

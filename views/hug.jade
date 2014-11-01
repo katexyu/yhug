@@ -4,5 +4,9 @@ block header
     script(type='text/javascript' src='/javascript/hug.js')
 
 block content
-    .ui.button#hug Hug Me
-    p#response
+    mixin navbar-mixin()
+    div.container.main
+        h1.header Hug Someone!
+        button.btn.btn-larger#hug Match Me
+        p#response
+    include navbar
