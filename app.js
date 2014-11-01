@@ -8,7 +8,7 @@ var session = require('express-session');
 var mongoose = require('mongoose');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var hug = require('./routes/hug');
 var auth = require('./routes/auth');
 var passport = require('passport');
 
@@ -35,7 +35,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/hug', hug);
 app.use('/auth', auth);
 
 

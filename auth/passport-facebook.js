@@ -25,7 +25,7 @@ module.exports = function(passport){
               } else {
                   // if there is no user with a matching FB account, create the user
                   var newUser = new User({facebookId: profile.id, accessToken: accessToken, givenName: profile.name.givenName, familyName: profile.name.familyName, photo: profile.photos[0].value});
-                  //newUser.save();
+                  newUser.save();
                   return done(null, newUser);
           }    
       });
