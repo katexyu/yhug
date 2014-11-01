@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var distance = require('gps-distance');
 
 var userSchema = mongoose.Schema({
     givenName: {type: String},
@@ -7,45 +6,39 @@ var userSchema = mongoose.Schema({
     facebookId: {type: String},
     accessToken: {type: String},
     photo: {type:String},
-    location: {
-        latitude: Number,
-        longitude: Number
-    }
+    latitude: {type: Number},
+    longitude: {type: Number},
+    wantsHug: {type: Boolean, required: true, default: false}
 });
 
-var User = mongoose.model('User', userSchema);
-
-userSchema.method('addToQueue', function(latitude, longitude, callback) {
+userSchema.method('addToQueue', function(latitude, longitude) {
     this.latitude = latitude;
     this.longitude = longitude;
-    this.inQueue = true;
-    var matchedUser = this.match(function(err, user) {
-        if (err) {
-            callback(err);
-            return;
-        }
-        callback(user);
-    });
+    this.wantsHug = true;
+    this.save();
 });
 
 userSchema.method('removeFromQueue', function() {
     this.latitude = null;
     this.longitude = null;
-    this.inQueue = false;
+    this.wantsHug = false;
+    this.save();
 });
 
 userSchema.method('match', function(callback) {
-    User.find({inQuene: true}).exec(function(err, users) {
+    var longitude = this.longitude;
+    var latitude = this.latitude;
+    var currentUser = this;
+    User.find({wantsHug: true}).exec(function(err, users) {
         if (err) {
             callback(err);
             return;
         }
         for (var i = 0; i < users.length; i++) {
             var user = users[i];
-            // kilometers
             var maxDistance = 1.0;
-            if (distance(this.latitude, this.longitude, user.latitude, user.longitude) < maxDistance) {
-                this.removeFromQueue();
+            if (getDistance(longitude, latitude, user.longitude, user.latitude) < maxDistance) {
+                currentUser.removeFromQueue();
                 user.removeFromQueue();
                 callback(null, user);
                 return;
@@ -55,4 +48,24 @@ userSchema.method('match', function(callback) {
     });
 });
 
+var User = mongoose.model('User', userSchema);
+
 module.exports = User;
+
+function getDistance(lon1,lat1,lon2,lat2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+  var dLon = deg2rad(lon2-lon1); 
+  var a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ; 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c; // Distance in km
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}

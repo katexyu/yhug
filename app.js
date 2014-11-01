@@ -7,9 +7,6 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var mongoose = require('mongoose');
 
-var routes = require('./routes/index');
-var hug = require('./routes/hug');
-var auth = require('./routes/auth');
 var passport = require('passport');
 
 var app = express();
@@ -30,13 +27,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //set up passport
 require('./auth/passport-facebook')(passport);
-app.use(session({ secret: 'yhug-at-yhack?' })); // session secret
+app.use(session({ secret: 'yhug-at-yhack?', resave: true, saveUninitialized: true })); // session secret
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', routes);
-app.use('/hug', hug);
-app.use('/auth', auth);
+app.use('/', require('./routes/index'));
+app.use('/hug', require('./routes/hug'));
+app.use('/auth', require('./routes/auth'));
 
 
 // catch 404 and forward to error handler
