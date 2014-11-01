@@ -36,6 +36,9 @@ userSchema.method('match', function(callback) {
         }
         for (var i = 0; i < users.length; i++) {
             var user = users[i];
+            if (user._id.equals(currentUser._id)) {
+                continue;
+            }
             var maxDistance = 1.0;
             if (getDistance(longitude, latitude, user.longitude, user.latitude) < maxDistance) {
                 currentUser.removeFromQueue();
