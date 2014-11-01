@@ -1,0 +1,13 @@
+extends layout
+
+block header
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src="https://cdn.socket.io/socket.io-1.2.0.js")
+    //- script(src="/socket.io/socket.io.js")
+    script(src="/javascript/message.js")
+
+block content
+    ul#messages
+    form(action="")
+        input#m(autocomplete="off")
+        button Send

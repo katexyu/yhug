@@ -69,12 +69,32 @@ app.use(function(err, req, res, next) {
     });
 });
 
+var http = require('http').Server(app);
+
+var io = require('socket.io')(http);
+// io.on('connection', function(socket){
+//   socket.on('chat message', function(msg){
+//     console.log('message: ' + msg);
+//   });
+// });
+
+io.on('connection', function(socket){
+  socket.on('chat message', function(msg){
+    io.emit('chat message', msg);
+  });
+});
+
+
+// http.listen(3000, function(){
+//     console.log('listening on *:3000');
+// });
+
 var debug = require('debug')('yhug');
 
 app.set('port', process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8080);
 app.set('ipaddress', process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
 
-var server = app.listen(app.get('port'), app.get('ipaddress'), function() {
+var server = http.listen(app.get('port'), app.get('ipaddress'), function() {
   debug('Express server listening on port ' + server.address().port);
 });
 
