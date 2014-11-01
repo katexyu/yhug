@@ -1,5 +1,13 @@
 extends layout
 
+block header
+    script(type='text/javascript' src='/javascript/index.js')
+
 block content
-  h1= title
-  p Welcome to #{title}
+    h1.ui.header= title
+        .sub.header Welcome to #{title}
+    .ui.facebook.button
+        i.facebook.icon
+        | Facebook
+    .ui.button Hug Me
+    p#location
