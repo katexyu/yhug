@@ -90,6 +90,21 @@ var run = function(status) {
         })
     });
 
+    $("#closeMeetup").on("click", function(e) {
+        $.ajax({
+            url: "/hug/status",
+            type: "PUT",
+            data: {
+                status: "DEFAULT"
+            },
+            success: function(response) {
+                location.reload();
+            },
+            error: function(jqXHR, textStatus, err) {
+                console.log(jqXHR.responseText);
+            }
+        })
+    });
 
     function getLocation() {
         if (navigator.geolocation) {
