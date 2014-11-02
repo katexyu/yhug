@@ -58,17 +58,18 @@ router.post('/accept', isAuthorized, function(req, res) {
     User.findById(req.user._id, function(err, user) {
         user.location = location;
         user.phoneNumber = phoneNumber;
-        user.status = STATUSES.CONFIRMED;
+        user.updateStatus(STATUSES.CONFIRMED);
         user.save();
     });
 });
 
 //check if your match has been accepted
 router.get('/match', isAuthorized, function(req, res){
-        User.findById(req.user._id, function(err, user) {
-        if (user.status === STATUSES.CONFIRMED) {
+        User.findById(req.user._id, function(err, currentUser) {
+        if (currentUser.status === STATUSES.CONFIRMED) {
             User.findById(user.huggerMatch, function(err, user) {
-                res.render('hug', {
+                if (user.status === STATUSES.CONFIRMED){
+                    res.render('hug', {
                     wantsHug: false,
                     location: user.location,
                     meetup: user.huggerMatch,
@@ -76,8 +77,15 @@ router.get('/match', isAuthorized, function(req, res){
                     photo: user.photo,
                     phoneNumber: user.phoneNumber
                 });
+                } else if (user.status === STATUSES.DEFAULT){
+                    currentUser.updateStatus(STATUSES.REJECTED);
+                    currentUser.save();
+                    res.render('hug', {rejected: true});
+                } else{
+                    return res.status(400).send({'error': 'oops, something went wrong'});
+                }
             });
-        } else if (user.status === STATUSES.DEFAULT) {
+        } else if (user.status === STATUSES.WANTS_HUG) {
             res.render('hug', {wantsHug: true});
         } else {
             res.render('hug', {wantsHug: false});
