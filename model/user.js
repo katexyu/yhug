@@ -12,7 +12,7 @@ var userSchema = mongoose.Schema({
     location: {type: String},
     phoneNumber: {type: String},
     huggerMatch: {type: mongoose.Schema.Types.ObjectId},
-    status: {type: String}
+    status: {type: String, default: STATUSES.DEFAULT}
 });
 
 userSchema.method('addToQueue', function(latitude, longitude, callback) {
@@ -20,13 +20,22 @@ userSchema.method('addToQueue', function(latitude, longitude, callback) {
     this.longitude = longitude;
     this.status = STATUSES.WANTS_HUG;
     this.save();
-    callback(null, this);
+});
+
+userSchema.method('updateStatus', function(status, callback) {
+    this.status = status;
+    this.save();
 });
 
 userSchema.method('removeFromQueue', function(callback) {
     this.status = STATUSES.DEFAULT;
     this.save();
-    callback(null, this);
+});
+
+userSchema.method('cancelMatch', function(callback) {
+    this.removeFromQueue();
+    this.huggerMatch = null;
+    this.save();
 });
 
 userSchema.method('match', function(callback) {
