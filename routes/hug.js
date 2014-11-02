@@ -25,18 +25,28 @@ router.get('/', isAuthorized, function(req, res) {
 
 router.post('/', isAuthorized, function(req, res) {
     User.findById(req.user._id, function(err, user) {
-        user.addToQueue(req.body.latitude, req.body.longitude, function(err, user) {
-            user.match(function(err, currentUser, matchedUser) {
-                res.status(200).send();
-            });
+        user.addToQueue(req.body.latitude, req.body.longitude);
+        user.match(function(err) {
+            res.status(200).send();
         });
       });
 });
 
 router.post('/cancel', isAuthorized, function(req, res) {
     User.findById(req.user._id, function(err, user) {
-        user.removeFromQueue(function(err, user) {
-            res.status(200).send();
+        user.removeFromQueue();
+        res.status(200).send();
+    });
+});
+
+router.post('/cancelmatch', isAuthorized, function(req, res) {
+    User.findById(req.user._id, function(err, currentUser) {
+        User.findById(currentUser.huggerMatch, function(err, user) {
+            currentUser.cancelMatch();
+            user.updateStatus(STATUSES.WANTS_HUG);
+            user.match(function(err) {
+                res.status(200).send();
+            });
         });
     });
 });

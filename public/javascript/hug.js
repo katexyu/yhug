@@ -31,6 +31,19 @@ $(document).ready(function() {
         })
     });
 
+    $("#cancelMatch").on("click", function(e) {
+        $.ajax({
+            url: "/hug/cancelmatch",
+            type: "POST",
+            success: function(response) {
+                location.reload();
+            },
+            error: function(jqXHR, textStatus, err) {
+                console.log(jqXHR.responseText);
+            }
+        })
+    });
+
     function getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
