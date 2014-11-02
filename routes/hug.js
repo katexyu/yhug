@@ -82,16 +82,15 @@ router.post('/accept', isAuthorized, function(req, res) {
     var location = req.body.location;
     var phoneNumber = req.body.phoneNumber;
     User.findById(req.user._id, function(err, user) {
-        user.location = location;
-        user.phoneNumber = phoneNumber;
-        user.updateStatus(STATUSES.ACCEPTED);
-        user.save();
-        User.findById(user.huggerMatch, function(err, matchedUser) {
-            if (matchedUser.status === STATUSES.ACCEPTED) {
-                user.updateStatus(STATUSES.CONFIRMED);
-                matchedUser.updateStatus(STATUSES.CONFIRMED);   
+        user.accept(location, phoneNumber, function(err, user) {
+            if (err) {
+                res.status(400).send("There was an error");
             }
-        })
+            res.status(200).send({
+                status: user.status,
+            });
+        });
+
     });
 });
 

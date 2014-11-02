@@ -64,6 +64,21 @@ userSchema.method('match', function(callback) {
     });
 });
 
+userSchema.method('accept', function(location, phoneNumber, callback) {
+    this.location = location;
+    this.phoneNumber = phoneNumber;
+    this.save();
+    this.updateStatus(STATUSES.ACCEPTED);
+    var user = this;
+    User.findById(user.huggerMatch, function(err, matchedUser) {
+        if (matchedUser.status === STATUSES.ACCEPTED) {
+            user.updateStatus(STATUSES.CONFIRMED);
+            matchedUser.updateStatus(STATUSES.CONFIRMED);
+        }
+        callback(err, user);
+    });
+});
+
 var User = mongoose.model('User', userSchema);
 
 module.exports = User;
