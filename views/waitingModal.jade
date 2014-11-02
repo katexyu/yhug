@@ -1,0 +1,11 @@
+#waitingModal.modal.fade(tabindex="-1", role="dialog", aria-labelledby="waitLabel", aria-hidden="true")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button.close(type="button", data-dismiss="modal", aria-hidden="true") ×     
+                h4#matchLabel.modal-title Waiting for #{name} to respond...
+            .modal-body
+                .row.text-center
+                    img#matchImg(src="#{photo}")
+            .modal-footer
+                button#cancel.btn.btn-danger.btn-large(type="submit", data-dismiss="modal") Cancel Request
