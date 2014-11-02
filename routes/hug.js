@@ -25,15 +25,7 @@ router.post('/', isAuthorized, function(req, res) {
     User.findById(req.user._id, function(err, user) {
         user.addToQueue(req.body.latitude, req.body.longitude);
         user.match(function(err, user) {
-            if (err) {
-                res.status(400).send(err);
-                return;
-            }
-            if (user) {
-                res.status(200).send("We matched you with " + user.givenName + "!!!!");
-            } else {
-                res.status(200).send("Sorry, we're still matching you!");
-            }
+            res.redirect('/');
         });
       });
 });
