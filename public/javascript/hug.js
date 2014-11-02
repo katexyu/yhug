@@ -41,6 +41,10 @@ var run = function(status) {
             $.ajax({
                 url: "/hug/accept",
                 type: "POST",
+                data: {
+                    phoneNumber: $("#phoneNumber").val(),
+                    location: $("#location").val(),
+                },
                 success: function(response) {
                     location.reload();
                 },

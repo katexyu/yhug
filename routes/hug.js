@@ -41,7 +41,6 @@ router.get('/', isAuthorized, function(req, res) {
                 phoneNumber: user.phoneNumber
             });
         } else if (user.status === STATUSES.CONFIRMED) {
-            console.log(user.huggerMatch);
             res.render('hug', {
                 status: user.status,
                 confirmed: true,
