@@ -21,7 +21,21 @@ var run = function(status) {
     checkUpdates();
 
     $("#hug").on("click", function(e) {
-        getLocation();
+        var position = getPosition();
+        $.ajax({
+            url: "/hug",
+            type: "POST",
+            data: {
+                longitude: position.coords.longitude,
+                latitude: position.coords.latitude,
+            },
+            success: function(response) {
+                location.reload();
+            },
+            error: function(jqXHR, textStatus, err) {
+                console.log(jqXHR.responseText);
+            }
+        });
     });
 
     $(".modal").modal({
@@ -124,24 +138,10 @@ var run = function(status) {
     function getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-                console.log(position);
-                $.ajax({
-                    url: "/hug",
-                    type: "POST",
-                    data: {
-                        longitude: position.coords.longitude,
-                        latitude: position.coords.latitude,
-                    },
-                    success: function(response) {
-                        location.reload();
-                    },
-                    error: function(jqXHR, textStatus, err) {
-                        console.log(jqXHR.responseText);
-                    }
-                });
+                return position;
             });
         } else {
-            $("#location").html("Geolocation is not supported by this browser.");
+            console.log("Geolocation is not supported by this browser.");
         }
     }
 

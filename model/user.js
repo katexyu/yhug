@@ -52,13 +52,10 @@ userSchema.method('match', function(callback) {
             if (user._id.equals(currentUser._id)) {
                 continue;
             }
-            var maxDistance = 0.4;
-            if (getDistance(longitude, latitude, user.longitude, user.latitude) < maxDistance) {
-                currentUser.set('status', STATUSES.MATCHED).set('huggerMatch', user._id).save();
-                user.set('status', STATUSES.MATCHED).set('huggerMatch', currentUser._id).save();
-                callback(null, currentUser, user);
-                return;
-            }
+            currentUser.set('status', STATUSES.MATCHED).set('huggerMatch', user._id).save();
+            user.set('status', STATUSES.MATCHED).set('huggerMatch', currentUser._id).save();
+            callback(null, currentUser, user);
+            return;
         };
         callback(null, currentUser);
     });
