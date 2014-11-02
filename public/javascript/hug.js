@@ -10,12 +10,12 @@ $(document).ready(function() {
             url: "/hug/accept",
             type: "POST",
             success: function(response) {
-
+                
             },
             error: function(jqXHR, textStatus, err) {
                 console.log(jqXHR.responseText);
             }
-        })
+        });
     });
 
     $("#cancel").on("click", function(e) {

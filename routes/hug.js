@@ -33,6 +33,7 @@ router.post('/', isAuthorized, function(req, res) {
 router.post('/cancel', isAuthorized, function(req, res) {
     User.findById(req.user._id, function(err, user) {
         user.removeFromQueue();
+        res.redirect('/');
     });
 });
 
