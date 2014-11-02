@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var User = require('../model/user');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -11,8 +12,11 @@ router.get('/', function(req, res) {
 
 /* POST to logout */
 router.post('/logout', function(req, res){
-    req.logout();
-    res.status(200).send({message: 'Logout successful'});
+    User.findById(req.user._id, function(err, user) {
+        user.removeFromQueue();
+        req.logout();
+        res.status(200).send({message: 'Logout successful'});        
+    });
 });
 
 module.exports = router;
