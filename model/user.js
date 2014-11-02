@@ -9,7 +9,8 @@ var userSchema = mongoose.Schema({
     photo: {type:String},
     latitude: {type: Number},
     longitude: {type: Number},
-    location: {text: String},
+    location: {type: String},
+    phoneNumber: {type: String},
     huggerMatch: {type: mongoose.Schema.Types.ObjectId},
     status: {type: String}
 });

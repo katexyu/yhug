@@ -13,6 +13,7 @@ router.get('/', isAuthorized, function(req, res) {
                     match: user.huggerMatch,
                     name: user.givenName,
                     photo: user.photo,
+                    phoneNumber: user.phoneNumber
                 });
             });
         } else if (user.status === STATUSES.WANTS_HUG) {
@@ -40,5 +41,38 @@ router.post('/cancel', isAuthorized, function(req, res) {
         });
     });
 });
+
+router.post('/accept', isAuthorized, function(req, res) {
+    var location = req.body.location;
+    var phoneNumber = req.body.phoneNumber;
+    User.findById(req.user._id, function(err, user) {
+        user.location = location;
+        user.phoneNumber = phoneNumber;
+        user.status = STATUSES.CONFIRMED;
+        user.save();
+    });
+});
+
+//check if your match has been accepted
+router.get('/match', isAuthorized, function(req, res){
+        User.findById(req.user._id, function(err, user) {
+        if (user.status === STATUSES.CONFIRMED) {
+            User.findById(user.huggerMatch, function(err, user) {
+                res.render('hug', {
+                    wantsHug: false,
+                    location: user.location,
+                    meetup: user.huggerMatch,
+                    name: user.givenName,
+                    photo: user.photo,
+                    phoneNumber: user.phoneNumber
+                });
+            });
+        } else if (user.status === STATUSES.DEFAULT) {
+            res.render('hug', {wantsHug: true});
+        } else {
+            res.render('hug', {wantsHug: false});
+        }
+    });
+})
 
 module.exports = router;

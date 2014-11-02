@@ -12,7 +12,17 @@
                     .form-group
                         label.col-sm-2.control-label(for="location") Location
                         .col-sm-10
-                            input#location.form-control(type="string", name="location", placeholder="Type in your location to meet up with your fellow hugger...")
+                            input#location.form-control(type="string", name="location", placeholder="Type in your location to meet up with your fellow hugger..." required=true)
+                    .form-signup    
+                        label.col-sm-2.control-label(for="location") Phone Number
+                        .col-sm-10
+                            if (phoneNumber)
+                                input#location.form-control(type="string", name="phoneNumber", value=phoneNumber required=true)
+                            else
+                                input#location.form-control(type="string", name="phoneNumber", placeholder="Type in your phone number to get in contact with your fellow hugger..." required=true)
+
+                        
+
             .modal-footer
                 button#cancel.btn.btn-danger.btn-large(type="submit", data-dismiss="modal") Cancel Request
                 button#accept.btn.btn-yhug.btn-large(type="submit", data-dismiss="modal") Accept
