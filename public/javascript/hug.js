@@ -3,6 +3,34 @@ $(document).ready(function() {
         getLocation();
     });
 
+    $("#matchModal").modal();
+
+    $("#accept").on("click", function(e) {
+        $.ajax({
+            url: "/hug/accept",
+            type: "POST",
+            success: function(response) {
+
+            },
+            error: function(jqXHR, textStatus, err) {
+                console.log(jqXHR.responseText);
+            }
+        })
+    });
+
+    $("#cancel").on("click", function(e) {
+        $.ajax({
+            url: "/hug/cancel",
+            type: "POST",
+            success: function(response) {
+                location.reload();
+            },
+            error: function(jqXHR, textStatus, err) {
+                console.log(jqXHR.responseText);
+            }
+        })
+    });
+
     function getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {

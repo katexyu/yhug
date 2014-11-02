@@ -1,0 +1,12 @@
+#meetupModal.modal.fade(tabindex="-1", role="dialog", aria-labelledby="meetupLabel", aria-hidden="true")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button.close(type="button", data-dismiss="modal", aria-hidden="true") ×     
+                h4#meetupLabel.modal-title Let's hug!
+            .modal-body
+                .row.text-center
+                    img#matchImg(src="#{photo}")
+                    h3 It's time to meet up for your hug. Give #{givenName} a call at #{phone}!
+            .modal-footer
+                button#accept.btn.btn-yhug.btn-large(type="submit", data-dismiss="modal") Ok

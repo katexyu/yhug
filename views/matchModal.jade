@@ -1,0 +1,18 @@
+#matchModal.modal.fade(tabindex="-1", role="dialog", aria-labelledby="matchLabel", aria-hidden="true")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button.close(type="button", data-dismiss="modal", aria-hidden="true") ×     
+                h4#matchLabel.modal-title You've got a match!
+            .modal-body
+                .row.text-center
+                    img#matchImg(src="#{photo}")
+                    h3= givenName
+                form#matchForm.form-horizontal(role="form")
+                    .form-group
+                        label.col-sm-2.control-label(for="location") Location
+                        .col-sm-10
+                            input#location.form-control(type="string", name="location", placeholder="Type in your location to meet up with your fellow hugger...")
+            .modal-footer
+                button#cancel.btn.btn-danger.btn-large(type="submit", data-dismiss="modal") Cancel Request
+                button#accept.btn.btn-yhug.btn-large(type="submit", data-dismiss="modal") Accept

@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var STATUSES = require('./statuses');
 
 var userSchema = mongoose.Schema({
     givenName: {type: String},
@@ -8,20 +9,21 @@ var userSchema = mongoose.Schema({
     photo: {type:String},
     latitude: {type: Number},
     longitude: {type: Number},
-    wantsHug: {type: Boolean, required: true, default: false}
+    location: {text: String},
+    huggerMatch: {type: mongoose.Schema.Types.ObjectId},
+    wantsHug: {type: Boolean, required: true, default: false},
+    status: {type: String}
 });
 
 userSchema.method('addToQueue', function(latitude, longitude) {
     this.latitude = latitude;
     this.longitude = longitude;
-    this.wantsHug = true;
+    this.status = STATUSES.WANTS_HUG;
     this.save();
 });
 
 userSchema.method('removeFromQueue', function() {
-    this.latitude = null;
-    this.longitude = null;
-    this.wantsHug = false;
+    this.status = STATUSES.DEFAULT;
     this.save();
 });
 
@@ -29,7 +31,7 @@ userSchema.method('match', function(callback) {
     var longitude = this.longitude;
     var latitude = this.latitude;
     var currentUser = this;
-    User.find({wantsHug: true}).exec(function(err, users) {
+    User.find({status: STATUSES.WANTS_HUG}).exec(function(err, users) {
         if (err) {
             callback(err);
             return;
@@ -39,15 +41,33 @@ userSchema.method('match', function(callback) {
             if (user._id.equals(currentUser._id)) {
                 continue;
             }
-            var maxDistance = 1.0;
+            var maxDistance = 0.4;
             if (getDistance(longitude, latitude, user.longitude, user.latitude) < maxDistance) {
-                currentUser.removeFromQueue();
-                user.removeFromQueue();
+                currentUser.set('status', STATUSES.MATCHED).set('huggerMatch', user._id).save();
+                user.set('status', STATUSES.MATCHED).set('huggerMatch', currentUser._id).save();
                 callback(null, user);
                 return;
             }
         };
         callback(null);
+    });
+});
+
+userSchema.method('cancelMatch', function(callback) {
+    User.findById(this.match, function(err, user) {
+        user.set('huggerMatch', null).save();
+        user.match(function(err, newMatch) {
+            if (err) {
+                callback(err);
+                return;
+            }
+            if (newMatch) {
+                callback(null, newMatch);
+                return;
+            } else {
+                callback(err);
+            }
+        });
     });
 });
 
