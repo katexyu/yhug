@@ -86,7 +86,21 @@ a {
   height:auto;
 }
 
-#hug{
+.btn-yhug {
     background-color:#FF7878;
     color:#FFFFFF;
+}
+
+.progress-bar-yhug {
+    background-color:#FF7878;
+}
+
+.progress {
+  width: 400px;
+  margin: 0px auto;
+}
+
+#matchImg {
+  width: 50px;
+  margin: 0px auto;
 }
