@@ -31,6 +31,7 @@ a {
 .main .logo{
     width:500px;
     height:auto;
+    margin-bottom:50px;
 }
 
 .header{
@@ -40,6 +41,7 @@ a {
 .facebook-btn{
     background-color:#4c66a4;
     color: #FFFFFF;
+    margin-bottom:10px;
 }
 
 /*Navbar*/
@@ -108,5 +110,20 @@ a {
 
   .hugs{
     margin-top:50px;
+  }
+}
+
+@media screen and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2){
+ .main .logo{
+    margin-top:0px;
+    width:80%;
+    margin-bottom:10px;
+  }
+ .btn-larger {
+    width:30%
+    height:auto;
+  }
+  .hugs{
+    margin-top:25px;
   }
 }
