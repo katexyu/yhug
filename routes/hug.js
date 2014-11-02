@@ -60,7 +60,7 @@ router.get('/', isAuthorized, function(req, res) {
 
 router.post('/', isAuthorized, function(req, res) {
     User.findById(req.user._id, function(err, user) {
-        user.addToQueue(req.body.latitude, req.body.longitude);
+        user.addToQueue();
         user.match(function(err) {
             return res.status(200).send();
         });

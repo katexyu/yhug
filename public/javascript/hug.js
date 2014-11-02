@@ -21,14 +21,9 @@ var run = function(status) {
     checkUpdates();
 
     $("#hug").on("click", function(e) {
-        var position = getLocation();
         $.ajax({
             url: "/hug",
             type: "POST",
-            data: {
-                longitude: position.coords.longitude,
-                latitude: position.coords.latitude,
-            },
             success: function(response) {
                 location.reload();
             },

@@ -7,40 +7,34 @@ var userSchema = mongoose.Schema({
     facebookId: {type: String},
     accessToken: {type: String},
     photo: {type:String},
-    latitude: {type: Number},
-    longitude: {type: Number},
     location: {type: String},
     phoneNumber: {type: String},
     huggerMatch: {type: mongoose.Schema.Types.ObjectId},
     status: {type: String, default: STATUSES.DEFAULT}
 });
 
-userSchema.method('addToQueue', function(latitude, longitude, callback) {
-    this.latitude = latitude;
-    this.longitude = longitude;
+userSchema.method('addToQueue', function() {
     this.status = STATUSES.WANTS_HUG;
     this.save();
 });
 
-userSchema.method('updateStatus', function(status, callback) {
+userSchema.method('updateStatus', function(status) {
     this.status = status;
     this.save();
 });
 
-userSchema.method('removeFromQueue', function(callback) {
+userSchema.method('removeFromQueue', function() {
     this.status = STATUSES.DEFAULT;
     this.save();
 });
 
-userSchema.method('cancelMatch', function(callback) {
+userSchema.method('cancelMatch', function() {
     this.removeFromQueue();
     this.huggerMatch = null;
     this.save();
 });
 
 userSchema.method('match', function(callback) {
-    var longitude = this.longitude;
-    var latitude = this.latitude;
     var currentUser = this;
     User.find({status: STATUSES.WANTS_HUG}).exec(function(err, users) {
         if (err) {
@@ -79,21 +73,3 @@ userSchema.method('accept', function(location, phoneNumber, callback) {
 var User = mongoose.model('User', userSchema);
 
 module.exports = User;
-
-function getDistance(lon1,lat1,lon2,lat2) {
-  var R = 6371; // Radius of the earth in km
-  var dLat = deg2rad(lat2-lat1);  // deg2rad below
-  var dLon = deg2rad(lon2-lon1); 
-  var a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2)
-    ; 
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-  var d = R * c; // Distance in km
-  return d;
-}
-
-function deg2rad(deg) {
-  return deg * (Math.PI/180)
-}
