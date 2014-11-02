@@ -11,9 +11,9 @@ block content
             .progress
                 .progress-bar.progress-bar-striped.progress-bar-yhug.active(role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%")
             p Hold tight! We're trying to match you with another hugger!
-            button.btn.btn-larger.btn-danger#cancel I hugged myself.
+            button.btn.btn-larger.btn-danger#cancel No hugs for me!
         else
             button.btn.btn-larger.btn-yhug#hug Match Me
     include navbar
-    if (modal)
+    if (match)
         include matchModal

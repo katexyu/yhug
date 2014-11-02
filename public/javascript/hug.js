@@ -10,7 +10,7 @@ $(document).ready(function() {
             url: "/hug/accept",
             type: "POST",
             success: function(response) {
-                
+                location.reload();
             },
             error: function(jqXHR, textStatus, err) {
                 console.log(jqXHR.responseText);
@@ -43,7 +43,7 @@ $(document).ready(function() {
                         latitude: position.coords.latitude,
                     },
                     success: function(response) {
-                        $("#response").html(response);
+                        location.reload();
                     },
                     error: function(jqXHR, textStatus, err) {
                         console.log(jqXHR.responseText);
