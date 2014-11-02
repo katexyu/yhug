@@ -37,10 +37,6 @@ var run = function(status) {
         if(!(/\S/.test($("#phoneNumber").val()))){
             $('.error').text('Please enter a valid phone number!');
                 return;
-        }
-        if(!($("#phoneNumber").val().match(/^(\()?\[2-9]{1}\d{2}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/))){
-            $('.error').text('Please enter a valid phone number!');
-            return;
         } else{
             $.ajax({
                 url: "/hug/accept",
