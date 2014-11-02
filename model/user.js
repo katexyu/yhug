@@ -11,20 +11,21 @@ var userSchema = mongoose.Schema({
     longitude: {type: Number},
     location: {text: String},
     huggerMatch: {type: mongoose.Schema.Types.ObjectId},
-    wantsHug: {type: Boolean, required: true, default: false},
     status: {type: String}
 });
 
-userSchema.method('addToQueue', function(latitude, longitude) {
+userSchema.method('addToQueue', function(latitude, longitude, callback) {
     this.latitude = latitude;
     this.longitude = longitude;
     this.status = STATUSES.WANTS_HUG;
     this.save();
+    callback(null, this);
 });
 
-userSchema.method('removeFromQueue', function() {
+userSchema.method('removeFromQueue', function(callback) {
     this.status = STATUSES.DEFAULT;
     this.save();
+    callback(null, this);
 });
 
 userSchema.method('match', function(callback) {
@@ -45,29 +46,11 @@ userSchema.method('match', function(callback) {
             if (getDistance(longitude, latitude, user.longitude, user.latitude) < maxDistance) {
                 currentUser.set('status', STATUSES.MATCHED).set('huggerMatch', user._id).save();
                 user.set('status', STATUSES.MATCHED).set('huggerMatch', currentUser._id).save();
-                callback(null, user);
+                callback(null, currentUser, user);
                 return;
             }
         };
-        callback(null);
-    });
-});
-
-userSchema.method('cancelMatch', function(callback) {
-    User.findById(this.match, function(err, user) {
-        user.set('huggerMatch', null).save();
-        user.match(function(err, newMatch) {
-            if (err) {
-                callback(err);
-                return;
-            }
-            if (newMatch) {
-                callback(null, newMatch);
-                return;
-            } else {
-                callback(err);
-            }
-        });
+        callback(null, currentUser);
     });
 });
 
