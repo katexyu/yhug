@@ -13,7 +13,7 @@ router.get('/', function(req, res) {
 /* POST to logout */
 router.post('/logout', function(req, res){
     User.findById(req.user._id, function(err, user) {
-        user.removeFromQueue();
+        user.cancelMatch();
         req.logout();
         res.status(200).send({message: 'Logout successful'});        
     });
