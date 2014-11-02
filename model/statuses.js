@@ -3,5 +3,6 @@ module.exports = {
     MATCHED: "MATCHED",
     DEFAULT: "DEFAULT",
     CONFIRMED: "CONFIRMED",
-    REJECTED: "REJECTED"
+    REJECTED: "REJECTED",
+    ACCEPTED: "ACCEPTED"
 }

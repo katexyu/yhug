@@ -2,6 +2,11 @@ extends layout
 
 block header
     script(type='text/javascript' src='/javascript/hug.js')
+    script(type = 'text/javascript').
+        var status =!{JSON.stringify(status)};
+        $(document).ready(function() {
+            run(status);
+        });
 
 block content
     mixin navbar-mixin()
@@ -12,12 +17,20 @@ block content
                 .progress-bar.progress-bar-striped.progress-bar-yhug.active(role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%")
             p Hold tight! We're trying to match you with another hugger!
             button.btn.btn-larger.btn-danger#cancel No hugs for me!
+        else if (waiting)
+            .progress
+                .progress-bar.progress-bar-striped.progress-bar-yhug.active(role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%")
+            p Waiting for your match to accept!
+        else if (confirmed)
+            .progress
+                .progress-bar.progress-bar-striped.progress-bar-yhug.active(role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%")
+            p Time to meet up!
         else
             button.btn.btn-larger.btn-yhug#hug Match Me
     include navbar
     if (match)
         include matchModal
-    if (meetup)
+    if (confirmed)
         include meetupModal
     if (rejected)
         include rejectModal

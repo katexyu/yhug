@@ -1,9 +1,33 @@
-$(document).ready(function() {
+var run = function(status) {
+
+    var checkUpdates = function() {
+        setTimeout(function() {
+            $.ajax({
+                url: "/hug/match",
+                type: "GET",
+                success: function(response) {
+                    if (status !== response.status) {
+                        location.reload();
+                    }
+                },
+                error: function(jqXHR, textStatus, err) {
+                    console.log(jqXHR.responseText);
+                }
+            });
+            checkUpdates();
+        }, 5000);
+    };
+
+    checkUpdates();
+
     $("#hug").on("click", function(e) {
         getLocation();
     });
 
-    $("#matchModal").modal();
+    $(".modal").modal({
+        keyboard: false,
+        backdrop: "static"
+    });
 
     $("#accept").on("click", function(e) {
         $.ajax({
@@ -22,6 +46,9 @@ $(document).ready(function() {
         $.ajax({
             url: "/hug/cancel",
             type: "POST",
+            data: {
+                type: "request"
+            },
             success: function(response) {
                 location.reload();
             },
@@ -33,8 +60,11 @@ $(document).ready(function() {
 
     $("#cancelMatch").on("click", function(e) {
         $.ajax({
-            url: "/hug/cancelmatch",
+            url: "/hug/cancel",
             type: "POST",
+            data: {
+                type: "match"
+            },
             success: function(response) {
                 location.reload();
             },
@@ -43,6 +73,23 @@ $(document).ready(function() {
             }
         })
     });
+
+    $("#closeRejected").on("click", function(e) {
+        $.ajax({
+            url: "/hug/status",
+            type: "PUT",
+            data: {
+                status: "WANTS_HUG"
+            },
+            success: function(response) {
+                location.reload();
+            },
+            error: function(jqXHR, textStatus, err) {
+                console.log(jqXHR.responseText);
+            }
+        })
+    });
+
 
     function getLocation() {
         if (navigator.geolocation) {
@@ -77,4 +124,4 @@ $(document).ready(function() {
             }
         });
     });
-});
+};

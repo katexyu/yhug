@@ -2,10 +2,10 @@
     .modal-dialog
         .modal-content
             .modal-header
-                button.close(type="button", data-dismiss="modal", aria-hidden="true") ×     
+                //- button.close(type="button", data-dismiss="modal", aria-hidden="true") ×     
                 h4#rejectLabel.modal-title Oops...
             .modal-body
                 .row.text-center
-                    h3 It seems like your match is busy right now. :( Try finding another match!
+                    h3 It looks like your match is busy! Looking for another hugger...
             .modal-footer
-                button#accept.btn.btn-yhug.btn-large(type="submit", data-dismiss="modal") Ok
+                button#closeRejected.btn.btn-yhug.btn-large(type="submit", data-dismiss="modal") Ok
