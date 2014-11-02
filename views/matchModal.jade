@@ -17,12 +17,7 @@
                     .form-group    
                         label.col-sm-2.control-label(for="location") Phone Number
                         .col-sm-10
-                            if (phoneNumber)
-                                input#phoneNumber.form-control(type="string", name="phoneNumber", value=phoneNumber required=true)
-                            else
-                                input#phoneNumber.form-control(type="string", name="phoneNumber", placeholder="Type in your phone number to get in contact with your fellow hugger..." required=true)
-
-                        
+                            input#phoneNumber.form-control(type="string", name="phoneNumber", placeholder="Type in your phone number to get in contact with your fellow hugger..." required=true)
 
             .modal-footer
                 button#cancelMatch.btn.btn-danger.btn-large(type="submit", data-dismiss="modal") Cancel Request
