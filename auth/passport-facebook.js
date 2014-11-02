@@ -3,14 +3,12 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var User = require('../model/user');
 var app = require('../app');
 
-//var fbConfigs = app.env === 'development'? config.test: config.production;
-var fbConfigs = config.test;
 
 module.exports = function(passport){
   passport.use(new FacebookStrategy({
-      clientID: fbConfigs.clientID,
-      clientSecret: fbConfigs.clientSecret,
-      callbackURL: fbConfigs.callbackURL,
+      clientID: process.env.FB_ID,
+      clientSecret: process.env.FB_SECRET,
+      callbackURL: process.env.FB_CALLBACK,
       profileFields: ['id', 'name', 'displayName', 'photos']
     },
     function(accessToken, refreshToken, profile, done) {
