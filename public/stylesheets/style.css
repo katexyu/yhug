@@ -1,3 +1,4 @@
+
 body {
   font: 14px "Lato", Helvetica, Arial, sans-serif;
 }
@@ -63,11 +64,12 @@ a {
   border-bottom: 1px solid #D8E6E6;
   background-color:#FAFAFA;
   height:55px;
+  width:100%;
   margin-bottom:50px;
 }
 #logout{
     float:right;
-    margin-right: 30px;
+    margin-right: 50px;
 }
 
 #logout-link{
@@ -89,4 +91,22 @@ a {
 #hug{
     background-color:#FF7878;
     color:#FFFFFF;
+}
+
+@media only screen and (max-width : 480px) {
+  .main .logo{
+    width:100%;
+  }
+
+  .btn-larger {
+    width:50%
+    height:auto;
+  }
+  .main h1 {
+    font-size:40px;
+  }
+
+  .hugs{
+    margin-top:50px;
+  }
 }
