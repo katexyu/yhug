@@ -15,7 +15,7 @@ var run = function(status) {
                 }
             });
             checkUpdates();
-        }, 5000);
+        }, 2000);
     };
 
     checkUpdates();
@@ -30,17 +30,31 @@ var run = function(status) {
     });
 
     $("#accept").on("click", function(e) {
-        $.ajax({
-            url: "/hug/accept",
-            type: "POST",
-            success: function(response) {
-                location.reload();
-            },
-            error: function(jqXHR, textStatus, err) {
-                console.log(jqXHR.responseText);
-            }
-        });
+        if(!(/\S/.test($("#location").val()))){
+            $('.error').text('Please enter a valid location!');
+                return;
+        }
+        if(!(/\S/.test($("#phoneNumber").val()))){
+            $('.error').text('Please enter a valid phone number!');
+                return;
+        }
+        if(!($("#phoneNumber").val().match(/^(\()?\[2-9]{1}\d{2}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/))){
+            $('.error').text('Please enter a valid phone number!');
+            return;
+        } else{
+            $.ajax({
+                url: "/hug/accept",
+                type: "POST",
+                success: function(response) {
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, err) {
+                    console.log(jqXHR.responseText);
+                }
+            });
+        }
     });
+
 
     $("#cancel").on("click", function(e) {
         $.ajax({
@@ -87,7 +101,7 @@ var run = function(status) {
             error: function(jqXHR, textStatus, err) {
                 console.log(jqXHR.responseText);
             }
-        })
+        });
     });
 
     $("#closeMeetup").on("click", function(e) {
@@ -103,8 +117,9 @@ var run = function(status) {
             error: function(jqXHR, textStatus, err) {
                 console.log(jqXHR.responseText);
             }
-        })
+        });
     });
+
 
     function getLocation() {
         if (navigator.geolocation) {
@@ -139,4 +154,4 @@ var run = function(status) {
             }
         });
     });
-};
+}

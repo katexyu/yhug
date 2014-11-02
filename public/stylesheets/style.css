@@ -104,9 +104,17 @@ a {
   margin: 0px auto;
 }
 
+.modal-body{
+    margin-bottom:50px;
+}
+
 #matchImg {
   width: 50px;
   margin: 0px auto;
+}
+
+.error{
+    color: #FF7878;
 }
 
 @media only screen and (max-width : 480px) {

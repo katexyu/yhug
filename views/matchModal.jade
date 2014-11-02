@@ -8,21 +8,22 @@
                 .row.text-center
                     img#matchImg(src="#{photo}")
                     h3 You've been matched with #{name}!
+                div.error 
                 form#matchForm.form-horizontal(role="form")
                     .form-group
                         label.col-sm-2.control-label(for="location") Location
                         .col-sm-10
                             input#location.form-control(type="string", name="location", placeholder="Type in your location to meet up with your fellow hugger..." required=true)
-                    .form-signup    
+                    .form-group    
                         label.col-sm-2.control-label(for="location") Phone Number
                         .col-sm-10
                             if (phoneNumber)
-                                input#location.form-control(type="string", name="phoneNumber", value=phoneNumber required=true)
+                                input#phoneNumber.form-control(type="string", name="phoneNumber", value=phoneNumber required=true)
                             else
-                                input#location.form-control(type="string", name="phoneNumber", placeholder="Type in your phone number to get in contact with your fellow hugger..." required=true)
+                                input#phoneNumber.form-control(type="string", name="phoneNumber", placeholder="Type in your phone number to get in contact with your fellow hugger..." required=true)
 
                         
 
             .modal-footer
                 button#cancelMatch.btn.btn-danger.btn-large(type="submit", data-dismiss="modal") Cancel Request
-                button#accept.btn.btn-yhug.btn-large(type="submit", data-dismiss="modal") Accept
+                button#accept.btn.btn-yhug.btn-large(type="submit") Accept

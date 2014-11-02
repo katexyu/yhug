@@ -5,22 +5,26 @@ var User = require('../model/user');
 var STATUSES = require('../model/statuses');
 
 router.get('/', isAuthorized, function(req, res) {
-    User.findById(req.user._id, function(err, user) {
+    User.findById(req.user._id).populate('huggerMatch').exec(function(err, user) {
         if (user.status === STATUSES.MATCHED) {
-            User.findById(user.huggerMatch, function(err, user) {
+            if (!user.huggerMatch) {
+                user.updateStatus(STATUSES.DEFAULT);
+                user.save();
+                res.render('hug', {status:user.status, wantsHug: false});
+            } else{
                 res.render('hug', {
                     status: user.status,
                     wantsHug: false,
                     match: user.huggerMatch,
-                    name: user.givenName,
-                    photo: user.photo,
-                    phoneNumber: user.phoneNumber
+                    name: user.huggerMatch.givenName,
+                    photo: user.huggerMatch.photo,
+                    phoneNumber: user.huggerMatch.phoneNumber
                 });
-            });
+            }
         } else if (user.status === STATUSES.WANTS_HUG) {
             res.render('hug', {
                 status: user.status,
-                wantsHug: true,
+                wantsHug: true
             });
         } else if (user.status === STATUSES.REJECTED) {
             res.render('hug', {
@@ -32,11 +36,19 @@ router.get('/', isAuthorized, function(req, res) {
             res.render('hug', {
                 status: user.status,
                 waiting: true,
+                name: user.huggerMatch.givenName,
+                photo: user.huggerMatch.photo,
+                phoneNumber: user.phoneNumber
             });
         } else if (user.status === STATUSES.CONFIRMED) {
+            console.log(user.huggerMatch);
             res.render('hug', {
                 status: user.status,
                 confirmed: true,
+                location: user.huggerMatch.location,
+                name: user.huggerMatch.givenName,
+                photo: user.huggerMatch.photo,
+                phoneNumber: user.huggerMatch.phoneNumber
             });
         } else {
             res.render('hug', {
@@ -51,7 +63,7 @@ router.post('/', isAuthorized, function(req, res) {
     User.findById(req.user._id, function(err, user) {
         user.addToQueue(req.body.latitude, req.body.longitude);
         user.match(function(err) {
-            res.status(200).send();
+            return res.status(200).send();
         });
       });
 });
@@ -60,7 +72,7 @@ router.post('/cancel', isAuthorized, function(req, res) {
     if (req.body.type === "request") {
         User.findById(req.user._id, function(err, user) {
             user.removeFromQueue();
-            res.status(200).send();
+            return res.status(200).send();
         });
     } else if (req.body.type === "match") {
         User.findById(req.user._id, function(err, currentUser) {
@@ -68,12 +80,12 @@ router.post('/cancel', isAuthorized, function(req, res) {
                 currentUser.cancelMatch();
                 user.updateStatus(STATUSES.REJECTED);
                 user.match(function(err) {
-                    res.status(200).send();
+                    return res.status(200).send();
                 });
             });
         });
     } else {
-        res.status(400).send("Specify request type");
+        return res.status(400).send("Specify request type");
     }
 
 });
@@ -84,9 +96,9 @@ router.post('/accept', isAuthorized, function(req, res) {
     User.findById(req.user._id, function(err, user) {
         user.accept(location, phoneNumber, function(err, user) {
             if (err) {
-                res.status(400).send("There was an error");
+                return res.status(400).send("There was an error");
             }
-            res.status(200).send({
+            return res.status(200).send({
                 status: user.status,
             });
         });
