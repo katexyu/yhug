@@ -21,7 +21,7 @@ var run = function(status) {
     checkUpdates();
 
     $("#hug").on("click", function(e) {
-        var position = getPosition();
+        var position = getLocation();
         $.ajax({
             url: "/hug",
             type: "POST",
