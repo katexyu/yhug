@@ -7,7 +7,7 @@ router.get('/', function(req, res) {
   if (req.isAuthenticated()){
     res.redirect('/hug'); //if logged in, redirect to the hugs page
   } 
-  res.render('index', { title: 'YHug' });
+  res.render('index');
 });
 
 /* POST to logout */

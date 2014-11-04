@@ -18,4 +18,5 @@
 
 **Source Code:** [https://github.com/katexyu/yhug](https://github.com/katexyu/yhug)
 
+Made with ♥ for YHack 2014
 ![yhug](http://www.yhug.me/images/yhug.png)

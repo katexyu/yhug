@@ -10,9 +10,9 @@ router.get('/', isAuthorized, function(req, res) {
             if (!user.huggerMatch) {
                 user.updateStatus(STATUSES.DEFAULT);
                 user.save();
-                res.render('hug', {status:user.status, wantsHug: false});
+                return res.render('hug', {status:user.status, wantsHug: false});
             } else{
-                res.render('hug', {
+                return res.render('hug', {
                     status: user.status,
                     wantsHug: false,
                     match: user.huggerMatch,
@@ -22,18 +22,18 @@ router.get('/', isAuthorized, function(req, res) {
                 });
             }
         } else if (user.status === STATUSES.WANTS_HUG) {
-            res.render('hug', {
+            return res.render('hug', {
                 status: user.status,
                 wantsHug: true
             });
         } else if (user.status === STATUSES.REJECTED) {
-            res.render('hug', {
+            return res.render('hug', {
                 status: user.status,
                 wantsHug: true,
                 rejected: true
             });
         } else if (user.status === STATUSES.ACCEPTED) {
-            res.render('hug', {
+            return res.render('hug', {
                 status: user.status,
                 waiting: true,
                 name: user.huggerMatch.givenName,
@@ -41,7 +41,7 @@ router.get('/', isAuthorized, function(req, res) {
                 phoneNumber: user.phoneNumber
             });
         } else if (user.status === STATUSES.CONFIRMED) {
-            res.render('hug', {
+            return res.render('hug', {
                 status: user.status,
                 confirmed: true,
                 location: user.huggerMatch.location,
@@ -50,7 +50,7 @@ router.get('/', isAuthorized, function(req, res) {
                 phoneNumber: user.huggerMatch.phoneNumber
             });
         } else {
-            res.render('hug', {
+            return res.render('hug', {
                 status: user.status,
                 wantsHug: false
             });
@@ -108,7 +108,7 @@ router.post('/accept', isAuthorized, function(req, res) {
 //check if your match has been accepted
 router.get('/match', isAuthorized, function(req, res){
     User.findById(req.user._id, function(err, user) {
-        res.status(200).send({
+        return res.status(200).send({
             status: user.status,
         });
     });
@@ -117,7 +117,7 @@ router.get('/match', isAuthorized, function(req, res){
 router.put('/status', isAuthorized, function(req, res) {
     User.findById(req.user._id, function(err, user) {
         user.updateStatus(req.body.status);
-        res.status(200).send({
+        return res.status(200).send({
             status: user.status,
         });
     });

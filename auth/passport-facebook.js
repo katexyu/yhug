@@ -1,4 +1,3 @@
-var config = require('../auth/config'); //not checked into the repo
 var FacebookStrategy = require('passport-facebook').Strategy;
 var User = require('../model/user');
 var app = require('../app');
@@ -6,9 +5,9 @@ var app = require('../app');
 
 module.exports = function(passport){
   passport.use(new FacebookStrategy({
-      clientID: process.env.FB_ID,
-      clientSecret: process.env.FB_SECRET,
-      callbackURL: process.env.FB_CALLBACK,
+      clientID: process.env.FB_ID || process.env.YHUG_FB_ID,
+      clientSecret: process.env.FB_SECRET || process.env.YHUG_FB_SECRET,
+      callbackURL: process.env.FB_CALLBACK || process.env.YHUG_CALLBACK,
       profileFields: ['id', 'name', 'displayName', 'photos']
     },
     function(accessToken, refreshToken, profile, done) {
